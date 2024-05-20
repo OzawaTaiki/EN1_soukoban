@@ -129,7 +129,9 @@ public class GameManagerScript : MonoBehaviour
             if (!success) { return false; }
         }
 
-        field[_moveFrom.y, _moveFrom.x].transform.position = new Vector3(_moveTo.x, field.GetLength(0) - _moveTo.y, 0);
+        //field[_moveFrom.y, _moveFrom.x].transform.position =new Vector3(_moveTo.x, field.GetLength(0) - _moveTo.y, 0);
+        Vector3 moveToPosition = new Vector3(_moveTo.x, field.GetLength(0) - _moveTo.y, 0);
+        field[_moveFrom.y, _moveFrom.x].GetComponent<Move>().MoveTo(moveToPosition);
         field[_moveTo.y, _moveTo.x] = field[_moveFrom.y, _moveFrom.x];
         field[_moveFrom.y, _moveFrom.x] = null;
 
@@ -141,7 +143,9 @@ public class GameManagerScript : MonoBehaviour
                particlePrefab,
               new Vector3(GetIndex().x, map.GetLength(0) - GetIndex().y, 0),
                Quaternion.identity);
+
         }
+
 
         return true;
     }
