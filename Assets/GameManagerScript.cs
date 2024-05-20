@@ -10,6 +10,7 @@ public class GameManagerScript : MonoBehaviour
     public GameObject boxPrefab;
     public GameObject goalPrefab;
     public GameObject particlePrefab;
+    public GameObject wallPrefab;
 
     private ObjectManager objectManager;
 
@@ -93,7 +94,8 @@ public class GameManagerScript : MonoBehaviour
     bool MoveNum(string _tag, Vector2Int _moveFrom, Vector2Int _moveTo)
     {
         if (_moveTo.y < 0 || _moveTo.y >= field.GetLength(0) ||
-            _moveTo.x < 0 || _moveTo.x >= field.GetLength(1))
+            _moveTo.x < 0 || _moveTo.x >= field.GetLength(1) ||
+            map[_moveTo.y, _moveTo.x] == 9)
             return false;
 
         if (field[_moveTo.y, _moveTo.x] != null && field[_moveTo.y, _moveTo.x].tag == "Box")
@@ -153,11 +155,13 @@ public class GameManagerScript : MonoBehaviour
     {
         map = new int[,]
         {
-            {1,0,0,2,0,0,0,0},
-            {0,0,0,0,0,0,2,0},
-            {0,0,0,0,0,0,2,0},
-            {0,0,0,0,0,0,2,0},
-            {0,3,0,2,0,0,0,0}
+            {9,9,9,9,9,9,9,9,9,9},
+            {9,1,0,0,2,0,0,0,0,9},
+            {9,0,0,0,0,0,0,2,0,9},
+            {9,0,0,0,0,0,0,2,0,9},
+            {9,0,0,0,0,0,0,2,0,9},
+            {9,0,3,0,2,0,0,0,0,9},
+            {9,9,9,9,9,9,9,9,9,9}
         };
         field = new GameObject[map.GetLength(0), map.GetLength(1)];
 
@@ -183,6 +187,13 @@ public class GameManagerScript : MonoBehaviour
                 {
                     objectManager.GenerateObject(
                         goalPrefab,
+                        new Vector3(x, map.GetLength(0) - y, 0.01f),
+                        Quaternion.identity);
+                }
+                if (map[y, x] == 9)
+                {
+                    objectManager.GenerateObject(
+                        wallPrefab,
                         new Vector3(x, map.GetLength(0) - y, 0.01f),
                         Quaternion.identity);
                 }
