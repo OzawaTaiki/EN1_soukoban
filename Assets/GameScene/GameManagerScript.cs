@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class GameManagerScript : MonoBehaviour
         new Vector2Int( 1, 0)
     };
 
-
+    public string nextGameScene;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,18 @@ public class GameManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (isCleared())
+        {
+            clearText.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene(nextGameScene);
+            }
+            return;
+        }
+
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             Restart();
@@ -70,10 +83,6 @@ public class GameManagerScript : MonoBehaviour
 
 
 
-        if (isCleared())
-        {
-            clearText.SetActive(true);
-        }
 
     }
 
@@ -194,7 +203,7 @@ public class GameManagerScript : MonoBehaviour
                 {
                     objectManager.GenerateObject(
                         wallPrefab,
-                        new Vector3(x, map.GetLength(0) - y, 0.01f),
+                        new Vector3(x, map.GetLength(0) - y, 0.0f),
                         Quaternion.identity);
                 }
             }
